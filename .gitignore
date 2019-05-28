@@ -1,4 +1,5 @@
 dist
 node_modules
 handler.zip
+.package-lock.json
 .env
