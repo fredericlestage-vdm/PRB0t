@@ -22,6 +22,8 @@
 //
 // From https://github.com/possibilities/micro-cors
 
+console.log('start of file : cors.js');
+
 const DEFAULT_ALLOW_METHODS = [
     "POST",
     "GET",

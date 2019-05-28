@@ -1,6 +1,8 @@
 const GitHub = require('github-api');
 const gh_token = process.env.GH_TOKEN || false;
 
+console.log('start of file : PullREquest.js');
+
 module.exports = class PullRequest {
 
     constructor(
@@ -10,6 +12,7 @@ module.exports = class PullRequest {
         token = null
     ) {
 
+        console.log('PulRequest.js : constructor');
         this.gh = new GitHub({
             token: token || gh_token
         });
@@ -41,6 +44,7 @@ module.exports = class PullRequest {
         }
     ) {
 
+        console.log('PulRequest.js : configure');
         this.commitMessage = `🤖 ${commitMessage || 'Anonymous Commit'}`;
         this.commitAuthor = commitAuthor;
         this.titlePullRequest = titlePullRequest;
@@ -50,6 +54,8 @@ module.exports = class PullRequest {
     }
 
     send() {
+
+        console.log('PulRequest.js : send');
 
         console.log('Create fork...');
         return this._fork()
@@ -102,12 +108,14 @@ module.exports = class PullRequest {
 
     get fullRepoName () {
 
+        console.log('PulRequest.js : fullRepoName');
         return `${this.user}/${this.masterRepo}`;
 
     }
 
     get branch() {
 
+        console.log('PulRequest.js : branch');
         const branch = this._branch || this.repo.default_branch;
         return branch;
 
@@ -115,6 +123,7 @@ module.exports = class PullRequest {
 
     get repo() {
 
+        console.log('PulRequest.js : repo');
         if (!this._repo) {
             this._repo = this.gh.getRepo(this.fullRepoName);
         }
@@ -125,6 +134,7 @@ module.exports = class PullRequest {
 
     _setBranch() {
 
+        console.log('PulRequest.js : _setBranch');
         if (this.branch) return;
 
         return this.repo.getDetails().then(res => {
@@ -137,6 +147,7 @@ module.exports = class PullRequest {
 
     _fork() {
 
+        console.log('PulRequest.js : _fork');
         return new Promise((resolve, reject) => {
 
             if (this.isBotRepo) {
@@ -155,6 +166,7 @@ module.exports = class PullRequest {
 
     _updateForkDefaultBranch() {
 
+        console.log('PulRequest.js : _updateForkDefaultBranch');
         return this.repo.getRef(`heads/${this.branch}`).then((ref) => {
             return this.fork.getRef(`heads/${this.branch}`).then(forkRef => {
 
@@ -178,12 +190,14 @@ module.exports = class PullRequest {
 
     _createBranch() {
 
+        console.log('PulRequest.js : _createBranch');
         return this.fork.createBranch(this.branch, this.forkBranch);
 
     }
 
     _setCurrentCommitSHA(reference = 'heads/master') {
 
+        console.log('PulRequest.js : _setCurrentCommitSHA');
         return this.fork
             .getRef(reference)
             .then((ref) => {
@@ -194,6 +208,7 @@ module.exports = class PullRequest {
 
     _setCurrentTreeSHA() {
 
+        console.log('PulRequest.js : _setCurrentTreeSHA');
         return this.repo
             .getCommit(this.currentCommitSHA)
             .then((commit) => {
@@ -204,6 +219,7 @@ module.exports = class PullRequest {
 
     _getCurrentTimestamp() {
 
+        console.log('PulRequest.js : _getCurrentTimestamp');
         const date = new Date(),
               yyyy = date.getFullYear().toString(),
               mm = (date.getMonth()+1).toString(),
@@ -217,6 +233,7 @@ module.exports = class PullRequest {
 
     _createFile(file) {
 
+        console.log('PulRequest.js : _createFile');
         return this.fork.createBlob(file.content)
             .then((blob) => {
                 this.filesToCommit.push({
@@ -230,6 +247,8 @@ module.exports = class PullRequest {
     }
 
     _createTree() {
+
+        console.log('PulRequest.js : _createTree');
         return this.fork.createTree(this.filesToCommit, this.currentTreeSHA)
             .then((tree) => {
                 this.currentTreeSHA = tree.data.sha;
@@ -238,11 +257,14 @@ module.exports = class PullRequest {
 
     _pushFiles(files) {
 
+        console.log('PulRequest.js : _pushFiles');
         return Promise.all(files.map(file => this._createFile(file)));
 
     }
 
     _commitChanges() {
+
+        console.log('PulRequest.js : _commitChanges');
         return this.fork.commit(this.currentCommitSHA, this.currentTreeSHA, this.commitMessage, {
             author: this.commitAuthor
         })
@@ -254,6 +276,7 @@ module.exports = class PullRequest {
 
     _updateHead() {
 
+        console.log('PulRequest.js : _updateHead');
         return this.fork.updateHead(
             `heads/${this.forkBranch}`,
             this.currentCommitSHA
@@ -263,6 +286,7 @@ module.exports = class PullRequest {
 
     _createPullRequest() {
 
+        console.log('PulRequest.js : _createPullRequest');
         return this.repo.createPullRequest({
             title: this.titlePullRequest || `🤖 PRB0t ${this.forkBranch}`,
             body: `${this.descriptionPullRequest || this.commitMessage}
