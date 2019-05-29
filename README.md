@@ -2,7 +2,7 @@
 The Pull Request Bot for Anonymous contributions on GitHub!
 
 ### Configuration
- - Create a `.env` file. at the root of the project
+ - Create a `.env` file at the root of the project
  - In your github account, navigate to `settings/Developper settings/Personal access tokens`
  - Click `Generate a new token`, you only need to select the `repo` option
  - Copy the token and add it to the `.env` file in this manner: `GH_TOKEN=[token]` (without the brackets)
