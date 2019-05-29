@@ -1,5 +1,5 @@
 # DEV environment for 🤖 CanadaBot
-The Pull Request Bot for Anonymous contributions on GitHub!
+Goes along with [DEV environment for ore-ero](https://github.com/fredericlestage-vdm/ore-ero/)
 
 ### Configuration
  - Create a `.env` file at the root of the project
