@@ -1,3 +1,4 @@
+require('dotenv').config()
 const GitHub = require('github-api');
 const gh_token = process.env.GH_TOKEN || false;
 
