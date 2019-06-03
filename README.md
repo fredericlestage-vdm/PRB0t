@@ -15,3 +15,6 @@ Note: the token allows the communication between this api and your github repo. 
  - Then you can `npm run start` to launch the node server (hosted on http://localhost:3000)
 
 Note: You can change the server's port in the `package.json` file on line 18: `"start": "micro -p [port] dist/micro.js",` (without the brackets).
+
+### FAQ
+One of the main difficulty is to create a file without a name (".env"). The easiest way to do so is to create it directly in your IDE instead of creating a new text document.txt and renaming it. Usually, Windows won't allow you to create a file with only an extension, but IDEs are usually more accepting.
